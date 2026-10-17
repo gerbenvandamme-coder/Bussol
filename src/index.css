@@ -1,0 +1,92 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  color-scheme: light;
+  --accent-gerben: #38bdf8;
+  --accent-seb: #f472b6;
+  --accent-shared: #a78bfa;
+  --accent-me: var(--accent-shared);
+  --accent-me-fg: #0f172a;
+  --glass-bg: rgba(255, 255, 255, 0.55);
+  --glass-strong-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(15, 23, 42, 0.1);
+  --field-bg: rgba(255, 255, 255, 0.7);
+  --page-bg: #eef2f9;
+}
+
+.dark {
+  color-scheme: dark;
+  --glass-bg: rgba(255, 255, 255, 0.06);
+  --glass-strong-bg: rgba(18, 24, 43, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --field-bg: rgba(255, 255, 255, 0.06);
+  --page-bg: #0b1020;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--page-bg);
+  color: #0f172a;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.4s ease;
+}
+
+.dark body {
+  color: #e2e8f0;
+}
+
+/* Zachte achtergrondgloed in de accentkleuren van Gerben, Seb en Samen */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(40rem 30rem at 8% 0%, color-mix(in srgb, var(--accent-gerben) 24%, transparent), transparent),
+    radial-gradient(36rem 28rem at 100% 18%, color-mix(in srgb, var(--accent-seb) 20%, transparent), transparent),
+    radial-gradient(44rem 30rem at 40% 105%, color-mix(in srgb, var(--accent-shared) 22%, transparent), transparent);
+}
+
+@layer components {
+  .glass {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    backdrop-filter: blur(16px) saturate(140%);
+    box-shadow: 0 8px 32px rgba(15, 23, 42, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  }
+
+  .glass-strong {
+    background: var(--glass-strong-bg);
+    border: 1px solid var(--glass-border);
+    -webkit-backdrop-filter: blur(24px) saturate(150%);
+    backdrop-filter: blur(24px) saturate(150%);
+    box-shadow: 0 16px 48px rgba(15, 23, 42, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+
+  .field {
+    width: 100%;
+    border-radius: 0.75rem;
+    border: 1px solid var(--glass-border);
+    background: var(--field-bg);
+    color: inherit;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    outline: none;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+
+  .field:focus {
+    border-color: var(--accent-me);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-me) 25%, transparent);
+  }
+}
