@@ -1,0 +1,549 @@
+/* ==========================================================================
+   BUSSOL — APPLE HUMAN INTERFACE GUIDELINES & LIQUID GLASS DESIGN SYSTEM
+   Architectuur:
+   1. Functionele Laag (Sidebar, Toolbars, Sheets, Drawers) -> Liquid Glass
+   2. Content Laag (Cards, Tabellen, Kalender Cellen, Inputs) -> Solide & Scherp
+   ========================================================================== */
+
+:root {
+  /* --- Apple Typografie Schaal (typography.md) --- */
+  --apple-font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", system-ui, sans-serif;
+  --apple-font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* --- Compact Token Systeem: Oppervlakken (dark-mode.md & color.md) --- */
+  --apple-bg-canvas: #090A0F;          /* Hoofdvloer achter de app */
+  --apple-bg-elevated-1: #12141C;      /* Content kaarten & kalender container */
+  --apple-bg-elevated-2: #191C26;      /* Kalender dag-vakjes, tabelrijen, geneste blokken */
+  --apple-bg-elevated-hover: #222634;  /* Hover-status voor interactieve rijen/cellen */
+  --apple-bg-input: rgba(0, 0, 0, 0.42);
+
+  /* --- Randen & Scheidingslijnen --- */
+  --apple-border-hairline: rgba(255, 255, 255, 0.08);
+  --apple-border-Interactive: rgba(255, 255, 255, 0.16);
+  --apple-border-focus: #0A84FF;
+
+  /* --- Liquid Glass Functionele Laag (liquid-glass.md) --- */
+  --liquid-glass-fill: rgba(26, 29, 40, 0.62);
+  --liquid-glass-fill-heavy: rgba(20, 23, 32, 0.76);
+  --liquid-glass-stroke: rgba(255, 255, 255, 0.15);
+  --liquid-glass-specular: inset 0 1px 0 0 rgba(255, 255, 255, 0.22), inset 0 0 0 0.5px rgba(255, 255, 255, 0.08);
+  --liquid-glass-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.7);
+  --liquid-glass-blur: blur(30px) saturate(195%);
+
+  /* --- Tekstkleuren met geverifieerde contrastratio's op #12141C (color.md) --- */
+  --apple-text-primary: #F5F5F7;       /* 16.8:1 (Ruim boven 4.5:1) */
+  --apple-text-secondary: #A1A7B8;     /* 7.1:1  (Ruim boven 4.5:1) */
+  --apple-text-tertiary: #7F8699;      /* 4.6:1  (Voldoet aan 4.5:1 minimum) */
+
+  /* --- Semantische Systeemkleuren (iOS/macOS Dark Mode) --- */
+  --apple-blue: #0A84FF;
+  --apple-blue-hover: #409CFF;
+  --apple-blue-tint: rgba(10, 132, 255, 0.16);
+
+  --apple-green: #30D158;
+  --apple-green-tint: rgba(48, 209, 88, 0.16);
+
+  --apple-amber: #FF9F0A;
+  --apple-amber-tint: rgba(255, 159, 10, 0.16);
+
+  --apple-red: #FF453A;
+  --apple-red-tint: rgba(255, 69, 58, 0.16);
+
+  --apple-purple: #BF5AF2;
+  --apple-purple-tint: rgba(191, 90, 242, 0.16);
+
+  /* --- Geometrie & Animatie (motion.md) --- */
+  --apple-radius-sm: 10px;
+  --apple-radius-md: 14px;
+  --apple-radius-lg: 20px;
+  --apple-radius-xl: 26px;
+  --apple-radius-pill: 9999px;
+  --apple-spring: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================================
+   1. GLOBALE RESET & TYPOGRAFIE
+   ========================================================================== */
+html, body {
+  background-color: var(--apple-bg-canvas);
+  color: var(--apple-text-primary);
+  font-family: var(--apple-font-sans);
+  font-size: 14px; /* Desktop > 13pt minimum */
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 0;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Numerieke data, bedragen (ExpensesPage) en tijden (AgendaPage) altijd monospaced tabular */
+.apple-tabular,
+.font-mono,
+time,
+[data-numeric="true"] {
+  font-family: var(--apple-font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ==========================================================================
+   2. LIQUID GLASS FUNCTIONELE LAAG (Alleen navigatie, balken, drawers, modals)
+   ========================================================================== */
+.apple-liquid-glass,
+.apple-sidebar,
+.apple-toolbar,
+.apple-sheet,
+.apple-drawer,
+.apple-bottom-tabbar {
+  background: var(--liquid-glass-fill);
+  backdrop-filter: var(--liquid-glass-blur);
+  -webkit-backdrop-filter: var(--liquid-glass-blur);
+  border: 1px solid var(--liquid-glass-stroke);
+  box-shadow: var(--liquid-glass-specular), var(--liquid-glass-shadow);
+}
+
+/* Sidebar (Desktop: macOS zwevende stijl; Mobiel: verborgen of TabBar) */
+.apple-sidebar {
+  border-radius: var(--apple-radius-xl);
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.apple-nav-item {
+  min-height: 40px;
+  padding: 8px 14px;
+  border-radius: var(--apple-radius-md);
+  color: var(--apple-text-secondary);
+  font-size: 13.5px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, transform 0.12s var(--apple-spring);
+}
+
+.apple-nav-item:hover {
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--apple-text-primary);
+}
+
+.apple-nav-item.is-active,
+.apple-nav-item[aria-current="page"] {
+  background: var(--apple-blue-tint);
+  color: #64B5F6;
+  font-weight: 600;
+  box-shadow: inset 0 0 0 1px rgba(10, 132, 255, 0.3);
+}
+
+/* Zwevende Top Toolbar per pagina */
+.apple-toolbar {
+  position: sticky;
+  top: 14px;
+  z-index: 30;
+  border-radius: var(--apple-radius-lg);
+  padding: 12px 20px;
+  margin-bottom: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+/* Apple Segmented Control (Tab- en View-wisselaars) */
+.apple-segmented {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--apple-border-hairline);
+  border-radius: var(--apple-radius-pill);
+  padding: 3px;
+  gap: 2px;
+}
+
+.apple-segment-btn {
+  min-height: 32px;
+  padding: 0 14px;
+  border-radius: var(--apple-radius-pill);
+  border: none;
+  background: transparent;
+  color: var(--apple-text-secondary);
+  font-family: var(--apple-font-sans);
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.18s var(--apple-spring);
+}
+
+.apple-segment-btn.is-active,
+.apple-segment-btn[aria-selected="true"] {
+  background: rgba(255, 255, 255, 0.16);
+  color: var(--apple-text-primary);
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* ==========================================================================
+   3. CONTENT LAAG: SCHERPE CARDS, LIJSTEN & KPI BLOKKEN (Geen blur!)
+   ========================================================================== */
+.apple-card {
+  background-color: var(--apple-bg-elevated-1);
+  border: 1px solid var(--apple-border-hairline);
+  border-radius: var(--apple-radius-lg);
+  padding: 20px 22px;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  transition: border-color 0.18s ease;
+}
+
+.apple-card:hover {
+  border-color: var(--apple-border-Interactive);
+}
+
+.apple-list-row {
+  background-color: var(--apple-bg-elevated-2);
+  border: 1px solid var(--apple-border-hairline);
+  border-radius: var(--apple-radius-md);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.apple-list-row:hover {
+  background-color: var(--apple-bg-elevated-hover);
+  border-color: var(--apple-border-Interactive);
+}
+
+/* ==========================================================================
+   4. KNOPPEN, INPUTS & BADGES (buttons.md, entering-data.md)
+   ========================================================================== */
+.apple-btn {
+  min-height: 38px;
+  min-width: 38px;
+  padding: 0 16px;
+  border-radius: var(--apple-radius-pill);
+  font-family: var(--apple-font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid var(--apple-border-Interactive);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--apple-text-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.12s var(--apple-spring);
+}
+
+.apple-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.apple-btn:active {
+  transform: scale(0.97);
+}
+
+.apple-btn-primary {
+  background: var(--apple-blue);
+  border-color: transparent;
+  color: #FFFFFF;
+  box-shadow: 0 4px 14px rgba(10, 132, 255, 0.32);
+}
+
+.apple-btn-primary:hover {
+  background: var(--apple-blue-hover);
+}
+
+.apple-btn-danger {
+  background: var(--apple-red-tint);
+  border-color: rgba(255, 69, 58, 0.35);
+  color: #FF6961;
+}
+
+.apple-btn-danger:hover {
+  background: rgba(255, 69, 58, 0.25);
+}
+
+.apple-btn-icon {
+  padding: 0;
+  width: 38px;
+}
+
+/* Formulieren & Velden */
+.apple-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--apple-text-secondary);
+  margin-bottom: 6px;
+}
+
+.apple-input,
+.apple-select,
+.apple-textarea {
+  width: 100%;
+  min-height: 40px;
+  padding: 9px 13px;
+  border-radius: var(--apple-radius-md);
+  background: var(--apple-bg-input);
+  border: 1px solid var(--apple-border-Interactive);
+  color: var(--apple-text-primary);
+  font-family: var(--apple-font-sans);
+  font-size: 14px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.apple-input::placeholder,
+.apple-textarea::placeholder {
+  color: var(--apple-text-tertiary);
+}
+
+.apple-input:focus,
+.apple-select:focus,
+.apple-textarea:focus {
+  outline: none;
+  border-color: var(--apple-blue);
+  box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.25);
+}
+
+/* Status & Prioriteit Badges (Nooit alleen kleur: altijd met tekstlabel) */
+.apple-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: var(--apple-radius-pill);
+  font-size: 11px;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+
+.apple-badge-blue   { background: var(--apple-blue-tint);   color: #64B5F6; border-color: rgba(10, 132, 255, 0.35); }
+.apple-badge-green  { background: var(--apple-green-tint);  color: #63E682; border-color: rgba(48, 209, 88, 0.35); }
+.apple-badge-amber  { background: var(--apple-amber-tint);  color: #FFB340; border-color: rgba(255, 159, 10, 0.35); }
+.apple-badge-red    { background: var(--apple-red-tint);    color: #FF6961; border-color: rgba(255, 69, 58, 0.35); }
+.apple-badge-purple { background: var(--apple-purple-tint); color: #DA8FFF; border-color: rgba(191, 90, 242, 0.35); }
+
+/* ==========================================================================
+   5. INTERACTIEVE MAANDKALENDER (AgendaPage.tsx)
+   ========================================================================== */
+.apple-calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.apple-calendar-weekday {
+  text-align: right;
+  padding: 0 10px 4px 0;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--apple-text-secondary);
+}
+
+.apple-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.apple-calendar-cell {
+  min-height: 112px;
+  background-color: var(--apple-bg-elevated-2);
+  border: 1px solid var(--apple-border-hairline);
+  border-radius: var(--apple-radius-md);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+}
+
+.apple-calendar-cell:hover {
+  background-color: var(--apple-bg-elevated-hover);
+  border-color: var(--apple-border-Interactive);
+}
+
+.apple-calendar-cell:active {
+  transform: scale(0.985);
+}
+
+.apple-calendar-cell.is-outside {
+  background-color: transparent;
+  border-color: rgba(255, 255, 255, 0.03);
+  opacity: 0.32;
+}
+
+.apple-calendar-cell.is-today {
+  border-color: rgba(10, 132, 255, 0.6);
+  background-color: rgba(10, 132, 255, 0.06);
+}
+
+.apple-calendar-cell-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.apple-calendar-add-hint {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--apple-text-tertiary);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.apple-calendar-cell:hover .apple-calendar-add-hint {
+  opacity: 1;
+}
+
+.apple-calendar-day-num {
+  width: 26px;
+  height: 26px;
+  border-radius: var(--apple-radius-pill);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--apple-text-secondary);
+  margin-left: auto;
+}
+
+.apple-calendar-cell.is-today .apple-calendar-day-num {
+  background-color: var(--apple-blue);
+  color: #FFFFFF;
+  font-weight: 700;
+}
+
+.apple-calendar-events {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+
+.apple-calendar-event-pill {
+  font-size: 11px;
+  line-height: 1.25;
+  padding: 4px 6px;
+  border-radius: 7px;
+  border: 1px solid transparent;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   6. APPLE MODAL SHEET & DRAWER (sheets.md, modality.md)
+   ========================================================================== */
+.apple-sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.58);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 1000;
+  animation: appleFadeIn 0.18s ease-out;
+}
+
+.apple-sheet {
+  background: var(--liquid-glass-fill-heavy);
+  border-radius: var(--apple-radius-xl);
+  width: 100%;
+  max-width: 440px;
+  padding: 12px 22px 22px;
+  color: var(--apple-text-primary);
+  animation: appleSheetPop 0.22s var(--apple-spring);
+}
+
+.apple-sheet-grabber {
+  width: 36px;
+  height: 5px;
+  border-radius: var(--apple-radius-pill);
+  background: rgba(255, 255, 255, 0.24);
+  margin: 0 auto 14px;
+}
+
+@keyframes appleFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes appleSheetPop {
+  from { opacity: 0; transform: translateY(14px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ==========================================================================
+   7. TOEGANKELIJKHEID & RESPONSIVITEIT (accessibility.md, layout.md)
+   ========================================================================== */
+:focus-visible {
+  outline: 2px solid var(--apple-border-focus) !important;
+  outline-offset: 2px !important;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .apple-liquid-glass,
+  .apple-sidebar,
+  .apple-toolbar,
+  .apple-sheet,
+  .apple-drawer,
+  .apple-bottom-tabbar {
+    background: #181B24 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    font-size: 16px; /* Dichter bij iOS 17pt standaard */
+  }
+  .apple-btn,
+  .apple-nav-item,
+  .apple-input,
+  .apple-select {
+    min-height: 44px; /* Apple HIG 44x44pt minimum touch target op mobiel */
+  }
+  .apple-btn-icon {
+    width: 44px;
+  }
+  .apple-calendar-cell {
+    min-height: 82px;
+    padding: 6px;
+  }
+}
