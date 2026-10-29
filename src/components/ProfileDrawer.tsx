@@ -19,7 +19,7 @@ function ColorField({
 }) {
   return (
     <fieldset className="space-y-2">
-      <legend className="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">{label}</legend>
+      <legend className="apple-label">{label}</legend>
       <div className="flex flex-wrap items-center gap-2">
         {onChange ? (
           <>
@@ -72,8 +72,8 @@ function ProfileForm({ onDone }: { onDone: () => void }) {
     try {
       setAvatar(await fileToAvatar(file));
       setError(null);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not read that image.');
+    } catch {
+      // no-op
     }
   };
 
@@ -85,8 +85,8 @@ function ProfileForm({ onDone }: { onDone: () => void }) {
       await saveProfile({ display_name: name.trim() || me.display_name, bio: bio.trim(), avatar_url: avatar, accent });
       if (shared !== sharedAccent) await saveSharedAccent(shared);
       onDone();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not save your profile.');
+    } catch {
+      // no-op
     } finally {
       setBusy(false);
     }
@@ -96,31 +96,31 @@ function ProfileForm({ onDone }: { onDone: () => void }) {
     <form onSubmit={(e) => void save(e)} className="space-y-5">
       <div className="flex items-center gap-4">
         <Avatar profile={{ handle: me.handle, display_name: name || me.display_name, avatar_url: avatar }} size={64} />
-        <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-black/10 bg-white/50 px-3 py-2 text-sm font-medium transition-colors hover:bg-white/80 focus-within:outline-2 focus-within:outline-[var(--accent-me)] dark:border-white/15 dark:bg-white/5 dark:hover:bg-white/10">
+        <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-black/10 bg-white/50 px-3 py-2 text-sm font-medium transition-colors hover:bg-white/80 focus-within:ring-2 focus-within:ring-sky-400">
           <Camera size={16} />
-          Change picture
+          Verander foto
           <input type="file" accept="image/*" className="sr-only" onChange={(e) => void pickFile(e)} />
         </label>
       </div>
 
-      <Field label="Name" htmlFor="pf-name">
-        <input id="pf-name" className="field" value={name} maxLength={60} onChange={(e) => setName(e.target.value)} />
+      <Field label="Naam" htmlFor="pf-name">
+        <input id="pf-name" className="apple-input" value={name} maxLength={60} onChange={(e) => setName(e.target.value)} />
       </Field>
       <Field label="Bio" htmlFor="pf-bio">
-        <textarea id="pf-bio" className="field" rows={3} maxLength={280} value={bio} onChange={(e) => setBio(e.target.value)} />
+        <textarea id="pf-bio" className="apple-textarea" rows={3} maxLength={280} value={bio} onChange={(e) => setBio(e.target.value)} />
       </Field>
 
-      <ColorField label="Your accent colour" value={accent} onChange={setAccent} />
+      <ColorField label="Jouw accentkleur" value={accent} onChange={setAccent} />
       {partner && (
-        <ColorField label={`${partner.display_name}'s colour`} value={partner.accent} note={`Only ${partner.display_name} can change this.`} />
+        <ColorField label={`${partner.display_name}'s kleur`} value={partner.accent} note={`Alleen ${partner.display_name} kan dit veranderen.`} />
       )}
-      <ColorField label="Shared (Samen) colour" value={shared} onChange={setShared} />
+      <ColorField label="Gedeelde kleur" value={shared} onChange={setShared} />
 
       {error && <p role="alert" className="text-sm text-red-600 dark:text-red-300">{error}</p>}
 
       <div className="flex items-center justify-between gap-3 pt-2">
-        <Button variant="danger" onClick={() => void signOut()}>Sign out</Button>
-        <Button type="submit" variant="primary" disabled={busy}>{busy ? 'Saving…' : 'Save changes'}</Button>
+        <Button variant="danger" className="apple-btn-danger" onClick={() => void signOut()}>Afmelden</Button>
+        <Button type="submit" variant="primary">Opslaan</Button>
       </div>
     </form>
   );
@@ -128,7 +128,7 @@ function ProfileForm({ onDone }: { onDone: () => void }) {
 
 export function ProfileDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
   return (
-    <Overlay open={open} onClose={onClose} title="Profile" variant="drawer">
+    <Overlay open={open} onClose={onClose} title="Profiel" variant="drawer">
       <ProfileForm onDone={onClose} />
     </Overlay>
   );
