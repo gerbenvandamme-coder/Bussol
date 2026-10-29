@@ -27,6 +27,8 @@ function PageView({ page, onNavigate }: { page: Page; onNavigate: (page: Page) =
       return <FilesPage />;
     case 'expenses':
       return <ExpensesPage />;
+    default:
+      return null;
   }
 }
 
@@ -37,7 +39,7 @@ function Shell() {
 
   if (!ready) {
     return (
-      <div className="flex min-h-screen items-center justify-center" role="status" aria-live="polite">
+      <div className="flex min-h-screen items-center justify-center" role="status" aria-live="polite" style={{ backgroundColor: 'var(--apple-bg-canvas)' }}>
         <motion.div
           className="size-10 rounded-full border-4 border-slate-400/30"
           style={{ borderTopColor: 'var(--accent-shared)' }}
@@ -51,11 +53,10 @@ function Shell() {
 
   if (!userId) return <AuthView />;
 
-  // Ingelogd, maar er is geen profiel gevonden (bv. schema.sql nog niet uitgevoerd)
   if (!me) {
     return (
-      <div className="flex min-h-screen items-center justify-center p-4">
-        <div className="glass-strong w-full max-w-md space-y-4 rounded-3xl p-8">
+      <div className="flex min-h-screen items-center justify-center p-4" style={{ backgroundColor: 'var(--apple-bg-canvas)' }}>
+        <div className="apple-card w-full max-w-md space-y-4 rounded-3xl p-8">
           <h1 className="text-lg font-semibold">Profile not found</h1>
           <p className="text-sm text-slate-500 dark:text-slate-400">
             You are signed in, but no profile exists for this account.
@@ -70,13 +71,16 @@ function Shell() {
   const current = NAV.find((n) => n.page === page);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen" style={{ backgroundColor: 'var(--apple-bg-canvas)' }}>
       <Sidebar page={page} onNavigate={setPage} onOpenProfile={() => setProfileOpen(true)} />
 
-      <main className="min-h-screen pb-10 pl-24 pr-4 pt-4 lg:pl-72">
-        <div className="mx-auto max-w-5xl">
-          <header className="mb-6 flex flex-wrap items-center justify-between gap-3">
-            <h1 className="text-2xl font-semibold tracking-tight">{current?.label ?? 'Co-Founder OS'}</h1>
+      <main className="min-h-screen pb-10 pt-4 md:pl-72">
+        <div className="mx-auto max-w-6xl px-3 md:px-5">
+          <header className="apple-toolbar mb-6">
+            <div>
+              <h1 className="text-2xl font-semibold tracking-tight">{current?.label ?? 'Co-Founder OS'}</h1>
+            </div>
+
             <div className="flex flex-wrap items-center gap-3">
               {mode === 'local' && (
                 <SlidingTabs
