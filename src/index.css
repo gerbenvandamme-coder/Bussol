@@ -13,6 +13,34 @@
   --glass-border: rgba(15, 23, 42, 0.1);
   --field-bg: rgba(255, 255, 255, 0.7);
   --page-bg: #eef2f9;
+
+  /* Bussol calendar design tokens */
+  --bussol-font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif;
+  --bussol-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace;
+  --bussol-canvas: #0b0c10;
+  --bussol-surface-1: #13151b;
+  --bussol-surface-2: #1c1f28;
+  --bussol-surface-hover: #252936;
+  --bussol-border: rgba(255, 255, 255, 0.08);
+  --bussol-border-strong: rgba(255, 255, 255, 0.16);
+  --bussol-glass-bg: rgba(28, 31, 42, 0.62);
+  --bussol-glass-border: rgba(255, 255, 255, 0.14);
+  --bussol-glass-highlight: inset 0 1px 0 0 rgba(255, 255, 255, 0.18);
+  --bussol-glass-shadow: 0 20px 45px -12px rgba(0, 0, 0, 0.65);
+  --bussol-text-primary: #f5f5f7;
+  --bussol-text-secondary: #a1a6b4;
+  --bussol-text-tertiary: #7e8494;
+  --bussol-accent: #0a84ff;
+  --bussol-accent-hover: #409cff;
+  --bussol-emerald-bg: rgba(48, 209, 88, 0.16);
+  --bussol-emerald-text: #63e682;
+  --bussol-emerald-border: rgba(48, 209, 88, 0.35);
+  --bussol-amber-bg: rgba(255, 159, 10, 0.16);
+  --bussol-amber-text: #ffb340;
+  --bussol-amber-border: rgba(255, 159, 10, 0.35);
+  --bussol-indigo-bg: rgba(10, 132, 255, 0.16);
+  --bussol-indigo-text: #64b5f6;
+  --bussol-indigo-border: rgba(10, 132, 255, 0.35);
 }
 
 .dark {
@@ -88,5 +116,313 @@ body::before {
   .field:focus {
     border-color: var(--accent-me);
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-me) 25%, transparent);
+  }
+}
+
+/* Bussol calendar / Apple HIG refinements */
+.bussol-cal-wrapper {
+  font-family: var(--bussol-font);
+  color: var(--bussol-text-primary);
+  background-color: var(--bussol-surface-1);
+  border: 1px solid var(--bussol-border);
+  border-radius: 24px;
+  padding: 20px;
+  max-width: 1120px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+}
+
+.bussol-cal-wrapper *,
+.bussol-cal-wrapper *::before,
+.bussol-cal-wrapper *::after {
+  box-sizing: border-box;
+}
+
+.bussol-glass-toolbar {
+  background: var(--bussol-glass-bg);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border: 1px solid var(--bussol-glass-border);
+  box-shadow: var(--bussol-glass-highlight), 0 8px 24px -6px rgba(0, 0, 0, 0.4);
+  border-radius: 18px;
+  padding: 12px 18px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+  position: sticky;
+  top: 12px;
+  z-index: 20;
+}
+
+.bussol-toolbar-title-group {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.bussol-month-title {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0;
+  color: var(--bussol-text-primary);
+}
+
+.bussol-month-subtitle {
+  font-size: 13px;
+  color: var(--bussol-text-secondary);
+  margin: 0;
+}
+
+.bussol-toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bussol-btn {
+  min-height: 38px;
+  padding: 0 14px;
+  border-radius: 9999px;
+  font-family: var(--bussol-font);
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid var(--bussol-border-strong);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--bussol-text-primary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background-color 0.15s ease, transform 0.12s ease;
+}
+
+.bussol-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.bussol-btn:active {
+  transform: scale(0.97);
+}
+
+.bussol-btn:focus-visible,
+.bussol-day-cell:focus-visible {
+  outline: 2px solid var(--bussol-accent);
+  outline-offset: 2px;
+}
+
+.bussol-btn-icon {
+  width: 38px;
+  padding: 0;
+}
+
+.bussol-btn-primary {
+  background: var(--bussol-accent);
+  border-color: transparent;
+  color: #ffffff;
+}
+
+.bussol-btn-primary:hover {
+  background: var(--bussol-accent-hover);
+}
+
+.bussol-btn-danger {
+  background: rgba(255, 69, 58, 0.15);
+  border-color: rgba(255, 69, 58, 0.35);
+  color: #ff6961;
+}
+
+.bussol-btn-danger:hover {
+  background: rgba(255, 69, 58, 0.25);
+}
+
+.bussol-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 8px;
+  text-align: right;
+}
+
+.bussol-weekday-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--bussol-text-secondary);
+  padding: 0 10px 4px 0;
+}
+
+.bussol-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.bussol-day-cell {
+  min-height: 112px;
+  background-color: var(--bussol-surface-2);
+  border: 1px solid var(--bussol-border);
+  border-radius: 14px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+  user-select: none;
+  position: relative;
+  text-align: left;
+}
+
+.bussol-day-cell:hover {
+  background-color: var(--bussol-surface-hover);
+  border-color: var(--bussol-border-strong);
+}
+
+.bussol-day-cell.is-outside {
+  background-color: transparent;
+  border-color: rgba(255, 255, 255, 0.03);
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.bussol-day-cell.is-today {
+  border-color: rgba(10, 132, 255, 0.55);
+  background-color: rgba(10, 132, 255, 0.05);
+}
+
+.bussol-day-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.bussol-day-add-hint {
+  font-size: 14px;
+  line-height: 1;
+  color: var(--bussol-text-tertiary);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.bussol-day-cell:hover .bussol-day-add-hint {
+  opacity: 1;
+}
+
+.bussol-day-number {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--bussol-text-secondary);
+  width: 26px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  margin-left: auto;
+}
+
+.bussol-day-cell.is-today .bussol-day-number {
+  background-color: var(--bussol-accent);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.bussol-events-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+
+.bussol-event-pill {
+  appearance: none;
+  font-size: 11px;
+  line-height: 1.3;
+  padding: 4px 6px;
+  border-radius: 7px;
+  border: 1px solid transparent;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+  text-align: left;
+  width: 100%;
+}
+
+.bussol-event-time {
+  font-family: var(--bussol-mono);
+  font-size: 10px;
+  opacity: 0.85;
+  flex-shrink: 0;
+}
+
+.bussol-event-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bussol-cat-indigo {
+  background: var(--bussol-indigo-bg);
+  color: var(--bussol-indigo-text);
+  border-color: var(--bussol-indigo-border);
+}
+
+.bussol-cat-emerald {
+  background: var(--bussol-emerald-bg);
+  color: var(--bussol-emerald-text);
+  border-color: var(--bussol-emerald-border);
+}
+
+.bussol-cat-amber {
+  background: var(--bussol-amber-bg);
+  color: var(--bussol-amber-text);
+  border-color: var(--bussol-amber-border);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .bussol-glass-toolbar {
+    background: #1c1f28;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bussol-btn,
+  .bussol-day-cell {
+    transition: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .bussol-cal-wrapper {
+    padding: 12px;
+    border-radius: 18px;
+  }
+
+  .bussol-day-cell {
+    min-height: 78px;
+    padding: 6px;
+    border-radius: 10px;
+  }
+
+  .bussol-btn {
+    min-height: 44px;
+  }
+
+  .bussol-btn-icon {
+    width: 44px;
   }
 }
